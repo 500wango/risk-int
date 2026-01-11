@@ -294,51 +294,86 @@ createApp({
         const updateChart = () => {
             if (!riskChart || !chartDom.value) return;
 
+            // 获取当前日期
+            const today = new Date().toISOString().split('T')[0];
+            
+            // 计算刻度标签位置 (只在顶部轴显示)
+            const chartWidth = chartDom.value.offsetWidth || 600;
+            const chartHeight = chartDom.value.offsetHeight || 400;
+            const centerX = chartWidth / 2;
+            const centerY = chartHeight * 0.58;
+            const radius = Math.min(chartWidth, chartHeight) * 0.30;
+            
+            // 生成刻度标签 graphic 元素
+            const scaleLabels = [];
+            for (let i = 0; i <= 8; i++) {
+                const value = i * 10;
+                const y = centerY - (radius * i / 8);
+                scaleLabels.push({
+                    type: 'text',
+                    left: centerX - 15,
+                    top: y - 8,
+                    style: {
+                        text: String(value),
+                        fill: '#5a7a9c',
+                        fontSize: 13
+                    }
+                });
+            }
+
             const option = {
                 backgroundColor: 'transparent',
+                title: {
+                    text: today,
+                    left: 'center',
+                    top: 15,
+                    textStyle: {
+                        color: '#1e3a5f',
+                        fontSize: 20,
+                        fontWeight: 'bold'
+                    }
+                },
                 tooltip: { trigger: 'item' },
+                graphic: scaleLabels,
                 radar: {
+                    center: ['50%', '58%'],
+                    radius: '60%',
+                    startAngle: 90,
                     indicator: [
-                        { name: '政治风险', max: 100 },
-                        { name: '经济风险', max: 100 },
-                        { name: '法律合规', max: 100 },
-                        { name: '安全形势', max: 100 },
-                        { name: '社会舆情', max: 100 }
+                        { name: '地缘外交风险', max: 80 },
+                        { name: '政治风险', max: 80 },
+                        { name: '经济风险', max: 80 },
+                        { name: '政策风险', max: 80 },
+                        { name: '社会舆情风险', max: 80 },
+                        { name: '法律合规风险', max: 80 },
+                        { name: '安全风险', max: 80 }
                     ],
                     name: {
                         textStyle: {
-                            color: '#ffffff',
-                            fontSize: 14,
-                            fontWeight: 'bold'
+                            color: '#3a5a7c',
+                            fontSize: 14
                         }
                     },
-                    splitArea: {
-                        areaStyle: {
-                            color: ['rgba(255,255,255,0.02)', 'rgba(255,255,255,0.05)']
-                        }
-                    },
-                    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.2)' } },
-                    splitLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
-                    axisName: {
-                        color: '#ffffff',
-                        fontSize: 14
-                    }
+                    splitNumber: 8,
+                    splitArea: { show: false },
+                    axisLine: { lineStyle: { color: 'rgba(120,140,180,0.6)' } },
+                    splitLine: { lineStyle: { color: 'rgba(120,140,180,0.5)' } },
+                    axisLabel: { show: false }
                 },
                 series: [
                     {
-                        name: '风险画像',
+                        name: '风险态势',
                         type: 'radar',
                         data: [
                             {
-                                value: [80, 50, 60, 40, 70],
+                                value: [50, 79, 70, 65, 55, 70, 50],
                                 name: '当前态势',
-                                areaStyle: { color: 'rgba(96, 165, 250, 0.4)' },
-                                itemStyle: { color: '#60a5fa' },
-                                label: {
-                                    show: true,
-                                    color: '#ffffff',
-                                    fontSize: 12
-                                }
+                                lineStyle: {
+                                    color: '#2c4a7c',
+                                    width: 3
+                                },
+                                areaStyle: null,
+                                symbol: 'none'
                             }
                         ]
                     }
