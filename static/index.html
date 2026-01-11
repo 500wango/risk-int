@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战略风险情报系统</title>
+    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (Local) -->
+    <script src="/static/js/lib/tailwind.js"></script>
+    <!-- Vue 3 (Local) -->
+    <script src="/static/js/lib/vue.global.js"></script>
+    <!-- ECharts (Local) -->
+    <script src="/static/js/lib/echarts.min.js"></script>
+    <!-- Fonts (System Default) -->
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155'
+                        },
+                        brand: {
+                            500: '#3b82f6',
+                            400: '#60a5fa'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+</head>
+
+<body class="bg-dark-900 text-gray-100 font-sans antialiased overflow-hidden">
+    <script>
+        window.onerror = function (msg, url, line) {
+            alert("System Error: " + msg + "\nIf the page is blank, check your network connection to CDNs.");
+        };
+    </script>
+    <div id="app" class="h-screen flex flex-col">
+        <!-- Header -->
+        <header class="h-16 border-b border-white/10 glass-header flex items-center justify-between px-6 z-50">
+            <div class="flex items-center space-x-3">
+                <div
+                    class="w-8 h-8 rounded bg-gradient-to-br from-brand-400 to-blue-600 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h1 class="text-xl font-bold tracking-tight">全球战略投资风险 <span class="text-brand-400">管理平台</span></h1>
+                <span class="ml-2 px-2 py-0.5 text-xs font-medium bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 rounded">Demo</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-sm text-gray-400">{{ currentTime }}</div>
+                <div class="w-8 h-8 rounded-full bg-gray-700 border border-gray-600"></div>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="flex-1 flex overflow-hidden">
+            <!-- Sidebar -->
+            <aside class="w-64 glass-sidebar border-r border-white/5 flex flex-col">
+                <nav class="p-4 space-y-2">
+                    <a href="#" @click="currentTab = 'global'"
+                        :class="{'bg-brand-500/20 text-brand-400 border-r-2 border-brand-400': currentTab === 'global'}"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                        <span>全球战略情报</span>
+                    </a>
+                    <a href="#" @click="openSourceManager"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all text-gray-400 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span>信源管理</span>
+                    </a>
+                    
+                    <!-- 外部链接 -->
+                    <a href="https://sunrisk.cn/website/modules/jsp/subjectDatabase/project/globalDatabase1.jsp" target="_blank"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all text-gray-400 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                            </path>
+                        </svg>
+                        <span>海外投资案例库</span>
+                        <svg class="w-3 h-3 ml-auto opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                    <a href="https://sunrisk.cn/website/modules/jsp/countryAndArea/country/country_m.jsp?countryid=186" target="_blank"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all text-gray-400 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                            </path>
+                        </svg>
+                        <span>国家风险评级</span>
+                        <svg class="w-3 h-3 ml-auto opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                    <a href="https://sunrisk.cn/website/modules/jsp/countryAndArea/country/country_m_2_0.jsp?countryid=186" target="_blank"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all text-gray-400 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        <span>年度国家风险报告</span>
+                        <svg class="w-3 h-3 ml-auto opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                    
+                    <!-- 分隔线 -->
+                    <div class="my-4 border-t border-white/10"></div>
+                    
+                    <!-- 合同风控中心移到最后 -->
+                    <a href="#" @click="currentTab = 'contract'"
+                        :class="{'bg-brand-500/20 text-brand-400 border-r-2 border-brand-400': currentTab === 'contract'}"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        <span>合同风控中心</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="flex-1 overflow-auto bg-gradient-to-br from-dark-900 to-dark-800 relative">
+                <!-- Background Grid -->
+                <div class="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
+
+                <!-- View: Global Intelligence -->
+                <div v-if="currentTab === 'global'" class="p-8 space-y-6 relative z-10">
+                    <!-- Top Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="glass-card p-6 rounded-xl border border-white/5">
+                            <h3 class="text-gray-400 text-sm font-medium">监测中信源</h3>
+                            <div class="text-3xl font-bold mt-2">{{ totalSources }}</div>
+                            <div class="mt-2 text-xs text-green-400 flex items-center">
+                                <span class="w-2 h-2 rounded-full bg-green-400 mr-2 animate-pulse"></span> 运行正常
+                            </div>
+                        </div>
+                        <div class="glass-card p-6 rounded-xl border border-white/5">
+                            <h3 class="text-gray-400 text-sm font-medium">高风险预警 (24h)</h3>
+                            <div class="text-3xl font-bold mt-2 text-red-400">{{ highRisks }}</div>
+                            <div class="mt-2 text-xs text-gray-500">最近 24 小时</div>
+                        </div>
+                        <div class="glass-card p-6 rounded-xl border border-white/5">
+                            <h3 class="text-gray-400 text-sm font-medium">累计情报收录</h3>
+                            <div class="text-3xl font-bold mt-2">{{ intelligenceItems.length }}</div>
+                            <div class="mt-2 text-xs text-brand-400 cursor-pointer hover:underline"
+                                @click="openSourceManager">
+                                管理信源 >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Dashboard Split -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
+                        <!-- Map/Charts with Tab -->
+                        <div class="lg:col-span-2 glass-card rounded-xl border border-white/5 p-4 flex flex-col">
+                            <!-- Tab Header -->
+                            <div class="flex items-center space-x-4 mb-4">
+                                <button @click="chartTab = 'heatmap'" 
+                                    :class="chartTab === 'heatmap' ? 'text-white border-b-2 border-brand-500' : 'text-gray-400 hover:text-white'"
+                                    class="pb-2 font-medium transition-colors">
+                                    风险态势热力图
+                                </button>
+                                <button @click="chartTab = 'trend'" 
+                                    :class="chartTab === 'trend' ? 'text-white border-b-2 border-brand-500' : 'text-gray-400 hover:text-white'"
+                                    class="pb-2 font-medium transition-colors">
+                                    风险趋势分析
+                                </button>
+                            </div>
+                            <!-- Chart Content -->
+                            <div v-show="chartTab === 'heatmap'" ref="chartDom" class="flex-1 w-full h-full min-h-[400px]"></div>
+                            <div v-show="chartTab === 'trend'" class="flex-1 w-full h-full min-h-[400px] flex items-center justify-center">
+                                <img src="/static/risk_trend.png" alt="风险趋势分析" class="max-w-full max-h-full object-contain rounded-lg">
+                            </div>
+                        </div>
+
+                        <!-- Live Feed -->
+                        <div class="glass-card rounded-xl border border-white/5 flex flex-col overflow-hidden">
+                            <div class="p-4 border-b border-white/5 flex justify-between items-center">
+                                <div class="flex items-center space-x-3">
+                                    <h3 class="text-lg font-medium">实时情报流</h3>
+                                    <div class="flex space-x-1">
+                                        <span class="w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+                                        <span class="text-xs text-red-500">LIVE</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <template v-if="!batchSelectMode">
+                                        <button @click="enterBatchMode"
+                                            class="text-xs px-2 py-1 rounded border border-white/10 text-gray-400 hover:text-white hover:border-white/30 transition-colors"
+                                            title="批量管理">
+                                            批量
+                                        </button>
+                                    </template>
+                                    <template v-else>
+                                        <span class="text-xs text-gray-400">已选 {{ selectedItems.length }} 项</span>
+                                        <button @click="selectAllItems"
+                                            class="text-xs px-2 py-1 rounded border border-white/10 text-gray-400 hover:text-white transition-colors">
+                                            全选
+                                        </button>
+                                        <button @click="batchDeleteItems" :disabled="selectedItems.length === 0"
+                                            class="text-xs px-2 py-1 rounded bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                            删除
+                                        </button>
+                                        <button @click="exitBatchMode"
+                                            class="text-xs px-2 py-1 rounded border border-white/10 text-gray-400 hover:text-white transition-colors">
+                                            取消
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+                                <div v-for="item in intelligenceItems" :key="item.id" 
+                                    @click="batchSelectMode ? toggleSelectItem(item.id) : openDetail(item)"
+                                    class="p-4 rounded bg-white/5 hover:bg-white/10 transition cursor-pointer border-l-2"
+                                    :class="selectedItems.includes(item.id) ? 'border-brand-400 bg-brand-500/10' : 'border-transparent hover:border-brand-400'">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div class="flex items-center space-x-2">
+                                            <input v-if="batchSelectMode" type="checkbox" 
+                                                :checked="selectedItems.includes(item.id)"
+                                                @click.stop="toggleSelectItem(item.id)"
+                                                class="w-4 h-4 rounded border-gray-600 bg-dark-800 text-brand-500 focus:ring-brand-500">
+                                            <span class="text-xs font-mono text-brand-400">{{ item.publish_date || '今日' }}</span>
+                                        </div>
+                                        <span class="text-xs px-2 py-0.5 rounded bg-white/10 text-gray-300">{{
+                                            item.content_type || 'Unknown' }}</span>
+                                    </div>
+                                    <h4 class="font-medium text-sm mb-1 leading-snug">{{ item.title_zh || item.title || '处理中...' }}</h4>
+                                    <p class="text-xs text-gray-400 line-clamp-2">{{ item.summary }}</p>
+                                    <div class="mt-2 flex justify-between items-center">
+                                        <div class="flex flex-wrap gap-1">
+                                            <span v-for="tag in item.risk_tags"
+                                                class="text-[10px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-500/30">{{
+                                                tag }}</span>
+                                        </div>
+                                        <button v-if="!batchSelectMode" @click.stop="deleteItem(item.id)"
+                                            class="text-gray-500 hover:text-red-400 transition-colors p-1 rounded hover:bg-white/10"
+                                            title="删除此条情报">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: Contract Risk Center -->
+                <div v-if="currentTab === 'contract'" class="p-8 h-full flex gap-6 relative z-10">
+                    <!-- Left Main Area -->
+                    <div class="flex-1 flex flex-col overflow-hidden">
+                        <!-- Upload Area (when no task selected) -->
+                        <div v-if="!currentTask"
+                            class="flex-1 flex flex-col items-center justify-center p-12 border-2 border-dashed border-white/10 rounded-2xl glass-card bg-white/5 hover:bg-white/10 transition-colors">
+                            <div class="w-16 h-16 rounded-full bg-brand-500/20 flex items-center justify-center mb-6">
+                                <svg class="w-8 h-8 text-brand-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                    </path>
+                                </svg>
+                            </div>
+                            <h2 class="text-2xl font-bold mb-2">上传合同文件</h2>
+                            <p class="text-gray-400 mb-6">支持 PDF 或 DOCX 格式。本地解析，AI 智能分析。</p>
+                            <input type="file" @change="uploadContract" class="hidden" ref="fileInput">
+                            <button @click="$refs.fileInput.click()"
+                                class="px-8 py-3 bg-brand-600 hover:bg-brand-500 rounded-lg font-medium transition-all shadow-lg shadow-brand-500/20">
+                                选择文件
+                            </button>
+                        </div>
+
+                        <!-- Processing State -->
+                        <div v-else-if="currentTask.status === 'processing'"
+                            class="flex-1 flex flex-col items-center justify-center">
+                            <div
+                                class="w-16 h-16 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mb-6">
+                            </div>
+                            <h3 class="text-xl font-medium">正在分析合同逻辑...</h3>
+                            <p class="text-gray-400 mt-2">本地规则引擎和AI智能分析</p>
+                        </div>
+
+                        <!-- Result View -->
+                        <div v-else class="h-full flex flex-col">
+                            <!-- Toolbar -->
+                            <div
+                                class="h-14 mb-4 glass-card rounded-xl px-6 flex items-center justify-between border border-white/5 flex-shrink-0">
+                                <div class="flex items-center space-x-4">
+                                    <button @click="currentTask = null" class="text-gray-400 hover:text-white text-sm">← 新建审核</button>
+                                    <div class="h-6 w-px bg-white/10"></div>
+                                    <h2 class="font-medium truncate max-w-[300px]" :title="currentTask.filename">{{ currentTask.filename }}</h2>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-sm text-gray-400">风险等级:</span>
+                                    <span class="px-3 py-1 rounded font-bold text-sm" :class="{
+                                            'bg-red-500/20 text-red-400 border border-red-500/30': currentTask.overall_risk_level === 'High',
+                                            'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30': currentTask.overall_risk_level === 'Medium',
+                                            'bg-green-500/20 text-green-400 border border-green-500/30': currentTask.overall_risk_level === 'Low'
+                                        }">
+                                        {{ currentTask.overall_risk_level }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 grid grid-cols-2 gap-4 overflow-hidden">
+                            <!-- Left: Clause List (Simulated Document View) -->
+                            <div class="glass-card rounded-xl border border-white/5 p-6 overflow-y-auto">
+                                <h3 class="text-sm font-medium text-gray-400 mb-4 uppercase tracking-wider">识别到的风险条款
+                                </h3>
+                                <div v-for="risk in risks" :key="risk.id" class="mb-6 group">
+                                    <div
+                                        class="p-4 rounded-lg bg-white/5 border border-transparent group-hover:border-white/10 transition-all">
+                                        <p class="font-mono text-sm text-gray-300 leading-relaxed">{{ risk.clause_text
+                                            }}</p>
+                                    </div>
+                                    <div class="flex items-center mt-2 space-x-2">
+                                        <div class="h-px bg-white/10 flex-1"></div>
+                                        <span class="text-xs text-gray-500">条款 ID: {{ risk.clause_id || 'General'
+                                            }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Analysis Cards -->
+                            <div
+                                class="glass-card rounded-xl border border-white/5 p-6 overflow-y-auto custom-scrollbar space-y-4">
+                                <h3 class="text-sm font-medium text-gray-400 mb-4 uppercase tracking-wider">AI 深度分析</h3>
+                                <div v-for="risk in risks" :key="risk.id"
+                                    class="p-5 rounded-lg bg-gradient-to-br from-white/5 to-white/0 border border-red-500/20 relative overflow-hidden">
+                                    <div
+                                        class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-red-500 to-transparent">
+                                    </div>
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <h4 class="font-bold text-lg text-red-400">{{ risk.risk_category }}</h4>
+                                            <span class="text-xs text-brand-400 font-mono">条款: {{ risk.clause_id || '未标注' }}</span>
+                                        </div>
+                                        <div class="px-2 py-0.5 rounded text-xs border border-white/10">{{
+                                            risk.risk_level }} 优先级</div>
+                                    </div>
+                                    <p class="text-sm text-gray-300 mb-3">{{ risk.explanation }}</p>
+                                    <div class="bg-black/30 p-3 rounded text-xs text-gray-400">
+                                        <span class="text-brand-400 font-bold">风险成因:</span> {{ risk.risk_reason }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Right: History Sidebar (Always Visible) -->
+                    <div class="w-72 glass-card rounded-xl border border-white/5 flex flex-col overflow-hidden flex-shrink-0">
+                        <div class="p-4 border-b border-white/10 flex justify-between items-center">
+                            <h3 class="font-medium">审核历史</h3>
+                            <span class="text-xs text-gray-400">{{ contractTasks.length }} 条</span>
+                        </div>
+                        <!-- Upload Button in Sidebar -->
+                        <div class="p-3 border-b border-white/5">
+                            <input type="file" @change="uploadContract" class="hidden" ref="fileInputSidebar">
+                            <button @click="$refs.fileInputSidebar.click()"
+                                class="w-full px-4 py-2 bg-brand-600 hover:bg-brand-500 rounded-lg text-sm font-medium transition-all flex items-center justify-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                <span>上传新合同</span>
+                            </button>
+                        </div>
+                        <div class="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar">
+                            <div v-for="task in contractTasks" :key="task.id"
+                                class="p-3 rounded-lg transition cursor-pointer group"
+                                :class="currentTask && currentTask.id === task.id ? 'bg-brand-500/20 border border-brand-500/30' : 'bg-white/5 hover:bg-white/10'"
+                                @click="viewContractResult(task.id)">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h4 class="text-sm font-medium truncate flex-1 mr-2">{{ task.filename }}</h4>
+                                    <button @click.stop="deleteContractTask(task.id)"
+                                        class="text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                            </path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-gray-500">{{ new Date(task.created_at).toLocaleDateString('zh-CN') }}</span>
+                                    <span class="px-2 py-0.5 rounded text-xs" :class="{
+                                        'bg-red-500/20 text-red-400': task.overall_risk_level === 'High',
+                                        'bg-yellow-500/20 text-yellow-400': task.overall_risk_level === 'Medium',
+                                        'bg-green-500/20 text-green-400': task.overall_risk_level === 'Low'
+                                    }">{{ task.overall_risk_level || '分析中' }}</span>
+                                </div>
+                            </div>
+                            <div v-if="contractTasks.length === 0" class="text-center py-8 text-gray-500 text-sm">
+                                暂无审核记录
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Intelligence Detail Modal -->
+                <div v-if="showDetailModal && currentDetailItem"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <div
+                        class="glass-card w-[900px] h-[85vh] flex flex-col rounded-xl border border-white/10 shadow-2xl relative overflow-hidden">
+                        <!-- Modal Header -->
+                        <div class="p-6 border-b border-white/10 flex justify-between items-start bg-dark-800/80">
+                            <div class="pr-8">
+                                <span class="text-xs font-mono text-brand-400">{{ currentDetailItem.publish_date
+                                    }}</span>
+                                <h2 class="text-2xl font-bold mt-1 text-white leading-tight">{{ currentDetailItem.title_zh || currentDetailItem.title
+                                    }}</h2>
+                            </div>
+                            <button @click="showDetailModal = false"
+                                class="text-gray-400 hover:text-white p-2 rounded hover:bg-white/5 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Modal Body -->
+                        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-8 bg-dark-900/50">
+                            <!-- Tags -->
+                            <div class="flex flex-wrap gap-2">
+                                <span v-for="tag in currentDetailItem.risk_tags"
+                                    class="px-3 py-1 rounded-full bg-red-500/20 text-red-300 border border-red-500/30 text-xs font-bold uppercase tracking-wider">
+                                    {{ tag }}
+                                </span>
+                                <span
+                                    class="px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30 text-xs font-bold uppercase tracking-wider">
+                                    来源: {{ currentDetailItem.content_type }}
+                                </span>
+                            </div>
+
+                            <!-- Summary Block -->
+                            <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                <h3
+                                    class="text-brand-400 font-bold mb-3 uppercase text-xs tracking-wider flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    智能摘要
+                                </h3>
+                                <p class="text-lg leading-relaxed text-gray-200">{{ currentDetailItem.summary }}</p>
+                            </div>
+
+                            <!-- Risk Analysis Block (if exists) -->
+                            <div v-if="currentDetailItem.risk_hint"
+                                class="bg-red-500/10 rounded-xl p-6 border border-red-500/20">
+                                <h3
+                                    class="text-red-400 font-bold mb-3 uppercase text-xs tracking-wider flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                        </path>
+                                    </svg>
+                                    风险研判
+                                </h3>
+                                <p class="text-gray-300">{{ currentDetailItem.risk_hint }}</p>
+                            </div>
+
+                            <!-- Original Content -->
+                            <div>
+                                <h3 class="text-gray-500 font-bold mb-4 uppercase text-xs tracking-wider">原始内容预览</h3>
+                                <!-- Content Area -->
+                                <div
+                                    class="prose prose-sm prose-invert max-w-none bg-white/5 p-4 rounded-xl border border-white/10 overflow-auto max-h-[60vh]">
+                                    <div
+                                        class="flex justify-between items-center mb-4 sticky top-0 bg-[#1e293b] p-2 z-10 border-b border-white/10">
+                                        <span class="text-xs text-blue-300 uppercase tracking-widest font-bold">
+                                            {{ showTranslation ? '中文译文 (Translated)' : '原始内容 (Original)' }}
+                                        </span>
+                                        <button @click="toggleTranslation"
+                                            class="px-3 py-1 text-xs rounded-full border transition-all duration-300"
+                                            :class="showTranslation ? 'bg-blue-600 border-blue-500 text-white' : 'bg-transparent border-white/20 text-gray-400 hover:text-white'">
+                                            <i class="fas fa-language mr-1"></i> {{ showTranslation ? '显示原文' : '查看译文' }}
+                                        </button>
+                                    </div>
+
+                                    <div v-if="!showTranslation"
+                                        class="whitespace-pre-wrap font-mono text-sm text-gray-300">
+                                        {{ currentDetailItem.original_text }}
+                                    </div>
+                                    <div v-else class="whitespace-pre-wrap font-sans text-sm text-gray-200">
+                                        <div v-if="currentDetailItem.translated_text">
+                                            {{ currentDetailItem.translated_text }}
+                                        </div>
+                                        <div v-else class="text-center py-8 text-gray-500 italic">
+                                            <i class="fas fa-spinner fa-spin mr-2" v-if="false"></i> 暂无译文 (Translation
+                                            not available)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="p-4 border-t border-white/10 bg-dark-900/80 flex justify-end space-x-3 items-center">
+                        <span class="text-xs text-gray-500 self-center mr-auto">ID: {{ currentDetailItem.id
+                            }}</span>
+
+                        <a v-if="currentDetailItem.source_url" :href="currentDetailItem.source_url" target="_blank"
+                            class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-brand-500/10 text-brand-400 hover:bg-brand-500/20 transition-colors text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                </path>
+                            </svg>
+                            <span>查看原文</span>
+                        </a>
+
+                        <button @click="showDetailModal = false"
+                            class="px-6 py-2 rounded-lg border border-white/10 hover:bg-white/5 transition-colors text-sm">关闭</button>
+                    </div>
+                </div>
+        </div>
+
+        <!-- Source Management Modal -->
+        <div v-if="showSourceModal"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div class="glass-card w-[800px] max-h-[80vh] flex flex-col rounded-xl border border-white/10 shadow-2xl">
+                <div class="p-6 border-b border-white/10 flex justify-between items-center bg-dark-800/50">
+                    <h3 class="text-xl font-bold">信源管理</h3>
+                    <div class="flex items-center space-x-3">
+                        <button @click="batchCrawlSources"
+                            :disabled="batchCrawling"
+                            class="bg-green-600 hover:bg-green-500 disabled:bg-gray-600 text-white px-4 py-1.5 rounded text-sm font-medium transition-colors flex items-center space-x-1">
+                            <svg v-if="batchCrawling" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span>{{ batchCrawling ? '采集中...' : '批量采集' }}</span>
+                        </button>
+                        <button @click="showSourceModal = false" class="text-gray-400 hover:text-white">✕</button>
+                    </div>
+                </div>
+                <div class="p-6 flex-1 overflow-y-auto">
+                    <!-- Add Source Input (In Modal) -->
+                    <div class="flex space-x-2 mb-6">
+                        <input v-model="newUrl" @keyup.enter="addSource" type="text" placeholder="输入新的信源 URL..."
+                            class="flex-1 bg-dark-900/50 border border-white/10 rounded px-3 py-2 text-sm focus:outline-none focus:border-brand-500">
+                        <button @click="addSource"
+                            class="bg-brand-500 hover:bg-brand-400 text-white px-4 py-2 rounded text-sm font-medium transition-colors">
+                            <span v-if="loadingSource">添加中...</span>
+                            <span v-else>添加</span>
+                        </button>
+                    </div>
+
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-gray-400 text-sm border-b border-white/10">
+                                <th class="pb-3 font-medium">URL</th>
+                                <th class="pb-3 font-medium">状态</th>
+                                <th class="pb-3 font-medium">更新时间</th>
+                                <th class="pb-3 font-medium text-right">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr v-for="source in sources" :key="source.id"
+                                class="border-b border-white/5 hover:bg-white/5">
+                                <td class="py-4 pr-4 max-w-[300px]">
+                                    <template v-if="editingSourceId === source.id">
+                                        <input v-model="editingSourceUrl" type="text"
+                                            class="w-full bg-dark-900/50 border border-brand-500 rounded px-2 py-1 text-sm focus:outline-none"
+                                            @keyup.enter="saveSourceEdit(source.id)"
+                                            @keyup.escape="cancelSourceEdit">
+                                    </template>
+                                    <template v-else>
+                                        <span class="truncate block" :title="source.url">{{ source.url }}</span>
+                                    </template>
+                                </td>
+                                <td class="py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span v-if="source.status === 'active'"
+                                            class="w-2 h-2 rounded-full bg-green-500"></span>
+                                        <span v-else-if="source.status === 'error'"
+                                            class="w-2 h-2 rounded-full bg-red-500"></span>
+                                        <span v-else class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
+                                        <span :class="{'text-red-400': source.status === 'error'}">
+                                            {{ source.status === 'error' ? '失败' : (source.status === 'active' ?
+                                            '正常' : '采集中') }}
+                                        </span>
+                                    </div>
+                                    <div v-if="source.error_message"
+                                        class="text-xs text-red-400 mt-1 max-w-[200px] truncate"
+                                        :title="source.error_message">
+                                        {{ source.error_message }}
+                                    </div>
+                                </td>
+                                <td class="py-4 text-gray-400">{{ source.last_crawled_at ? new
+                                    Date(source.last_crawled_at).toLocaleString('zh-CN') : '-' }}</td>
+                                <td class="py-4 text-right space-x-2">
+                                    <template v-if="editingSourceId === source.id">
+                                        <button @click="saveSourceEdit(source.id)"
+                                            class="text-green-400 hover:text-green-300 text-xs px-2 py-1 rounded border border-green-400/30">保存</button>
+                                        <button @click="cancelSourceEdit"
+                                            class="text-gray-400 hover:text-gray-300 text-xs px-2 py-1 rounded border border-gray-400/30">取消</button>
+                                    </template>
+                                    <template v-else>
+                                        <button @click="startEditSource(source)"
+                                            class="text-gray-400 hover:text-gray-300 text-xs px-2 py-1 rounded border border-gray-400/30">编辑</button>
+                                        <button @click="retrySource(source.id)"
+                                            class="text-brand-400 hover:text-brand-300 text-xs px-2 py-1 rounded border border-brand-400/30">采集</button>
+                                        <button @click="deleteSource(source.id)"
+                                            class="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded border border-red-400/30">删除</button>
+                                    </template>
+                                </td>
+                            </tr>
+                            <tr v-if="sources.length === 0">
+                                <td colspan="4" class="py-8 text-center text-gray-500">暂无信源数据</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        </main>
+    </div>
+    </div>
+
+    <!-- App Logic -->
+    <script src="/static/js/app.js"></script>
+</body>
+
+</html>
