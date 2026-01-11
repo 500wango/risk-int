@@ -89,7 +89,7 @@ class CrawlerService:
                 # 尝试等待新闻列表或文章内容出现
                 try:
                     await page.wait_for_selector('article, .news-item, .news-list, .content, main, .article-content, .news-content, body', timeout=10000)
-                except:
+                except Exception:
                     pass
                 
                 # 滚动页面触发懒加载
@@ -98,7 +98,7 @@ class CrawlerService:
                     await page.wait_for_timeout(2000)
                     await page.evaluate('window.scrollTo(0, document.body.scrollHeight)')
                     await page.wait_for_timeout(2000)
-                except:
+                except Exception:
                     pass
                 
                 # gov.uz 特殊处理：尝试提取文章主体内容
@@ -130,7 +130,7 @@ class CrawlerService:
                         }''')
                         if article_content:
                             html_content = article_content
-                    except:
+                    except Exception:
                         pass
                 
                 if not html_content:
