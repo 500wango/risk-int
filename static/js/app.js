@@ -4,6 +4,7 @@ createApp({
     setup() {
         const currentTab = ref('global');
         const chartTab = ref('heatmap');  // 'heatmap' or 'trend'
+        const sanctionsTab = ref('entities');  // 'entities' or 'individuals'
         const currentTime = ref('');
         const newUrl = ref('');
         const loadingSource = ref(false);
@@ -476,6 +477,7 @@ createApp({
         return {
             currentTab,
             chartTab,
+            sanctionsTab,
             currentTime,
             newUrl,
             loadingSource,
