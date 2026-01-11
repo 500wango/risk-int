@@ -315,8 +315,9 @@ createApp({
                     top: y - 8,
                     style: {
                         text: String(value),
-                        fill: '#5a7a9c',
-                        fontSize: 13
+                        fill: '#1a3a5c',
+                        fontSize: 14,
+                        fontWeight: 'bold'
                     }
                 });
             }
@@ -350,8 +351,9 @@ createApp({
                     ],
                     name: {
                         textStyle: {
-                            color: '#3a5a7c',
-                            fontSize: 14
+                            color: '#1a3a5c',
+                            fontSize: 14,
+                            fontWeight: 'bold'
                         }
                     },
                     splitNumber: 8,
@@ -372,7 +374,9 @@ createApp({
                                     color: '#2c4a7c',
                                     width: 3
                                 },
-                                areaStyle: null,
+                                areaStyle: {
+                                    color: 'rgba(44, 74, 124, 0.25)'
+                                },
                                 symbol: 'none'
                             }
                         ]
