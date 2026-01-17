@@ -13,3 +13,4 @@ aiofiles
 python-multipart
 newspaper3k
 lxml[html_clean]
+html2text
