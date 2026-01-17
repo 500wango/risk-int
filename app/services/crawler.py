@@ -68,9 +68,14 @@ class CrawlerService:
             import html2text
             
             async with async_playwright() as p:
-                browser = await p.chromium.launch(headless=settings.CRAWL_HEADLESS)
+                browser = await p.chromium.launch(
+                    headless=settings.CRAWL_HEADLESS,
+                    args=['--no-sandbox', '--disable-setuid-sandbox']
+                )
                 context = await browser.new_context(
-                    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    viewport={'width': 1920, 'height': 1080},
+                    locale='en-US'
                 )
                 page = await context.new_page()
                 
@@ -78,26 +83,26 @@ class CrawlerService:
                 
                 # 使用 domcontentloaded 而不是 networkidle，避免超时
                 try:
-                    await page.goto(url, wait_until='domcontentloaded', timeout=30000)
+                    await page.goto(url, wait_until='domcontentloaded', timeout=45000)
                 except Exception as nav_err:
                     print(f"[Playwright] Navigation warning: {nav_err}")
                     # 即使超时也继续尝试获取内容
                 
-                # 等待内容加载
-                await page.wait_for_timeout(5000)
+                # 等待内容加载 - 增加等待时间
+                await page.wait_for_timeout(8000)
                 
                 # 尝试等待新闻列表或文章内容出现
                 try:
-                    await page.wait_for_selector('article, .news-item, .news-list, .content, main, .article-content, .news-content, body', timeout=10000)
+                    await page.wait_for_selector('article, .news-item, .news-list, .content, main, .article-content, .news-content, body', timeout=15000)
                 except Exception:
-                    pass
+                    print(f"[Playwright] Selector wait timeout, continuing anyway")
                 
                 # 滚动页面触发懒加载
                 try:
                     await page.evaluate('window.scrollTo(0, document.body.scrollHeight / 2)')
-                    await page.wait_for_timeout(2000)
+                    await page.wait_for_timeout(3000)
                     await page.evaluate('window.scrollTo(0, document.body.scrollHeight)')
-                    await page.wait_for_timeout(2000)
+                    await page.wait_for_timeout(3000)
                 except Exception:
                     pass
                 
