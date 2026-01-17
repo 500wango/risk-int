@@ -125,6 +125,16 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                         </svg>
                     </a>
+                    <a href="#" @click="currentTab = 'casestudy'"
+                        :class="{'bg-brand-500/20 text-brand-400 border-r-2 border-brand-400': currentTab === 'casestudy'}"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all text-gray-400 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        <span>中国企业海外投资案例库</span>
+                    </a>
                     <a href="https://sunrisk.cn/website/modules/jsp/subjectDatabase/project/globalDatabase1.jsp" target="_blank"
                         class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all text-gray-400 hover:text-white">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -484,6 +494,171 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                                 </svg>
                             </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: Chinese Enterprise Overseas Investment Case Study -->
+                <div v-if="currentTab === 'casestudy'" class="p-8 h-full flex flex-col relative z-10 overflow-auto">
+                    <div class="glass-card rounded-xl border border-white/5 p-6 mb-6">
+                        <h2 class="text-2xl font-bold mb-2">中国企业海外投资案例库</h2>
+                        <p class="text-sm text-gray-400">中石油中亚天然气管道项目</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- 企业及项目概况 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-lg font-bold mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                                企业及项目概况
+                            </h3>
+                            <div class="space-y-3 text-sm text-gray-300">
+                                <p>中国石油天然气集团是中国最大的油气生产商和供应商。</p>
+                                <p>中亚天然气管道是中国第一条跨国天然气管道，总投资约<span class="text-brand-400 font-semibold">100亿美元</span>，全长<span class="text-brand-400 font-semibold">1833公里</span>，途经土库曼斯坦、乌兹别克斯坦、哈萨克斯坦到达中国新疆，年设计输气能力<span class="text-brand-400 font-semibold">550亿立方米</span>。</p>
+                            </div>
+                        </div>
+
+                        <!-- 出海模式 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-lg font-bold mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                出海模式
+                            </h3>
+                            <div class="space-y-3 text-sm text-gray-300">
+                                <p><span class="text-brand-400 font-semibold">资源合作+基础设施投资</span></p>
+                                <p>采用"资源换贷款"模式，中国提供贷款和管道建设，换取长期天然气供应合同。</p>
+                            </div>
+                        </div>
+
+                        <!-- 核心举措 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-lg font-bold mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                                </svg>
+                                核心举措
+                            </h3>
+                            <div class="space-y-2 text-sm text-gray-300">
+                                <div class="flex items-start">
+                                    <span class="text-brand-400 mr-2">1.</span>
+                                    <span><span class="font-semibold">多国协调机制：</span>建立四国政府间协调委员会</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-brand-400 mr-2">2.</span>
+                                    <span><span class="font-semibold">分段建设管理：</span>按国别分段建设，降低政治风险</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-brand-400 mr-2">3.</span>
+                                    <span><span class="font-semibold">技术标准统一：</span>推广中国管道建设标准和技术</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-brand-400 mr-2">4.</span>
+                                    <span><span class="font-semibold">本地化采购：</span>在沿线国家采购超过50%的物资和服务</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 金融服务支持 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-lg font-bold mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                金融服务支持
+                            </h3>
+                            <div class="space-y-2 text-sm text-gray-300">
+                                <div class="flex items-start">
+                                    <span class="text-green-400 mr-2">•</span>
+                                    <span><span class="font-semibold">政府间贷款：</span>中国提供250亿美元贷款，换取天然气供应</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-green-400 mr-2">•</span>
+                                    <span><span class="font-semibold">出口信贷：</span>中国出口信用保险公司提供政治和商业风险保险</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-green-400 mr-2">•</span>
+                                    <span><span class="font-semibold">项目融资：</span>组建国际银团提供项目融资</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-green-400 mr-2">•</span>
+                                    <span><span class="font-semibold">人民币结算：</span>部分交易采用人民币结算，降低汇率风险</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 风险应对 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-lg font-bold mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                风险应对
+                            </h3>
+                            <div class="space-y-2 text-sm text-gray-300">
+                                <div class="flex items-start">
+                                    <span class="text-yellow-400 mr-2">1.</span>
+                                    <span><span class="font-semibold">地缘政治风险：</span>保持中立，与各国政府均建立良好关系</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-yellow-400 mr-2">2.</span>
+                                    <span><span class="font-semibold">安全风险：</span>与沿线国家安保部队合作，建立分段安保责任制</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-yellow-400 mr-2">3.</span>
+                                    <span><span class="font-semibold">价格波动风险：</span>采用长期合同与现货价格挂钩的定价机制</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-yellow-400 mr-2">4.</span>
+                                    <span><span class="font-semibold">技术标准差异：</span>推动中国标准与当地标准的互认</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 存在的问题与不足 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-lg font-bold mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                存在的问题与不足
+                            </h3>
+                            <div class="space-y-2 text-sm text-gray-300">
+                                <div class="flex items-start">
+                                    <span class="text-red-400 mr-2">•</span>
+                                    <span>沿线国家政策稳定性差异大</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-red-400 mr-2">•</span>
+                                    <span>极端气候和复杂地质条件增加建设难度</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-red-400 mr-2">•</span>
+                                    <span>多国协调效率有待提高</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-red-400 mr-2">•</span>
+                                    <span>人民币国际化程度不足影响结算便利性</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 成果与意义 -->
+                    <div class="glass-card rounded-xl border border-white/5 p-6 mt-6">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                            </svg>
+                            成果与意义
+                        </h3>
+                        <div class="space-y-3 text-sm text-gray-300">
+                            <p>项目自2009年投产以来，已累计向中国输送天然气超过<span class="text-green-400 font-semibold">3000亿立方米</span>，占中国进口天然气总量的<span class="text-green-400 font-semibold">30%以上</span>。</p>
+                            <p>管道建设带动了中国装备、技术和标准"走出去"，创造了<span class="text-green-400 font-semibold">数万个</span>当地就业岗位。</p>
+                            <p>该项目建立了中国与中亚能源合作的新模式，保障了国家能源安全，是<span class="text-brand-400 font-semibold">"一带一路"能源合作的典范</span>。</p>
                         </div>
                     </div>
                 </div>
