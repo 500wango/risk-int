@@ -157,6 +157,16 @@
                         </svg>
                         <span>国家法律查询系统</span>
                     </a>
+                    <a href="#" @click="currentTab = 'contract'"
+                        :class="{'bg-brand-500/20 text-brand-400 border-r-2 border-brand-400': currentTab === 'contract'}"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all text-gray-400 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        <span>智能合同审核</span>
+                    </a>
                     <a href="#" @click="currentTab = 'sanctions'"
                         :class="{'bg-brand-500/20 text-brand-400 border-r-2 border-brand-400': currentTab === 'sanctions'}"
                         class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all text-gray-400 hover:text-white">
@@ -167,6 +177,16 @@
                         </svg>
                         <span>制裁名单查询</span>
                     </a>
+                    <a href="#" @click="currentTab = 'compliance'"
+                        :class="{'bg-brand-500/20 text-brand-400 border-r-2 border-brand-400': currentTab === 'compliance'}"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all text-gray-400 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                            </path>
+                        </svg>
+                        <span>多维合规审校</span>
+                    </a>
                     <a href="#" @click="currentTab = 'dispute'"
                         :class="{'bg-brand-500/20 text-brand-400 border-r-2 border-brand-400': currentTab === 'dispute'}"
                         class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all text-gray-400 hover:text-white">
@@ -176,21 +196,6 @@
                             </path>
                         </svg>
                         <span>争议解决实务咨询</span>
-                    </a>
-                    
-                    <!-- 分隔线 -->
-                    <div class="my-4 border-t border-white/10"></div>
-                    
-                    <!-- 智能合同审核移到最后 -->
-                    <a href="#" @click="currentTab = 'contract'"
-                        :class="{'bg-brand-500/20 text-brand-400 border-r-2 border-brand-400': currentTab === 'contract'}"
-                        class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                            </path>
-                        </svg>
-                        <span>智能合同审核</span>
                     </a>
                 </nav>
             </aside>
@@ -328,19 +333,74 @@
                 <!-- View: Sanctions List Query -->
                 <div v-if="currentTab === 'sanctions'" class="p-8 h-full flex flex-col relative z-10 overflow-auto">
                     <div class="glass-card rounded-xl border border-white/5 p-6 mb-6">
-                        <h2 class="text-2xl font-bold mb-2">制裁名单查询</h2>
-                        <p class="text-sm text-gray-400 mb-4">数据来源：联合国安理会</p>
-                        <div class="flex space-x-4 mb-4">
-                            <button @click="sanctionsTab = 'entities'" 
-                                :class="sanctionsTab === 'entities' ? 'bg-brand-500 text-white' : 'bg-white/10 text-gray-300'"
-                                class="px-4 py-2 rounded-lg transition-colors">
-                                实体制裁名单 (273)
-                            </button>
-                            <button @click="sanctionsTab = 'individuals'" 
-                                :class="sanctionsTab === 'individuals' ? 'bg-brand-500 text-white' : 'bg-white/10 text-gray-300'"
-                                class="px-4 py-2 rounded-lg transition-colors">
-                                个人制裁名单 (726)
-                            </button>
+                        <h2 class="text-2xl font-bold mb-4">制裁名单查询</h2>
+                        
+                        <!-- 制裁发起机构分类 -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold mb-3 text-brand-400">制裁发起机构</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <!-- 国际机构 -->
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-medium mb-2 flex items-center">
+                                        <svg class="w-4 h-4 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        国际机构
+                                    </h4>
+                                    <ul class="text-sm text-gray-300 space-y-1">
+                                        <li>• 联合国安理会</li>
+                                        <li>• 世界银行</li>
+                                        <li>• 国际货币基金组织</li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- 区域机构 -->
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-medium mb-2 flex items-center">
+                                        <svg class="w-4 h-4 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                        </svg>
+                                        区域机构
+                                    </h4>
+                                    <ul class="text-sm text-gray-300 space-y-1">
+                                        <li>• 欧盟</li>
+                                        <li>• 非洲联盟</li>
+                                        <li>• 东盟</li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- 主要国家 -->
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-medium mb-2 flex items-center">
+                                        <svg class="w-4 h-4 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
+                                        </svg>
+                                        主要国家
+                                    </h4>
+                                    <ul class="text-sm text-gray-300 space-y-1">
+                                        <li>• 美国</li>
+                                        <li>• 英国</li>
+                                        <li>• 加拿大</li>
+                                        <li>• 澳大利亚</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-white/10 pt-6">
+                            <p class="text-sm text-gray-400 mb-4">数据来源：联合国安理会</p>
+                            <div class="flex space-x-4 mb-4">
+                                <button @click="sanctionsTab = 'entities'" 
+                                    :class="sanctionsTab === 'entities' ? 'bg-brand-500 text-white' : 'bg-white/10 text-gray-300'"
+                                    class="px-4 py-2 rounded-lg transition-colors">
+                                    实体制裁名单 (273)
+                                </button>
+                                <button @click="sanctionsTab = 'individuals'" 
+                                    :class="sanctionsTab === 'individuals' ? 'bg-brand-500 text-white' : 'bg-white/10 text-gray-300'"
+                                    class="px-4 py-2 rounded-lg transition-colors">
+                                    个人制裁名单 (726)
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -474,26 +534,179 @@
                 </div>
 
                 <!-- View: Law Query System -->
-                <div v-if="currentTab === 'lawquery'" class="p-8 h-full flex flex-col relative z-10">
-                    <div class="glass-card rounded-xl border border-white/5 p-6 flex-1">
-                        <h2 class="text-2xl font-bold mb-6">国家法律查询系统</h2>
-                        <div class="space-y-4">
-                            <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E4%B9%8C%E5%85%B9%E5%88%AB%E5%85%8B%E6%96%AF%E5%9D%A6&region=&country=&state=&themeIds=&theme=&topic=" 
-                               target="_blank"
-                               class="flex items-center justify-between p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group">
-                                <div class="flex items-center">
-                                    <svg class="w-6 h-6 mr-4 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
-                                    </svg>
-                                    <div>
-                                        <div class="font-medium text-lg">乌兹别克斯坦共和国法律查询</div>
-                                        <div class="text-sm text-gray-400">商务部收录法律法规 67 条</div>
+                <div v-if="currentTab === 'lawquery'" class="p-8 h-full flex flex-col relative z-10 overflow-auto">
+                    <div class="glass-card rounded-xl border border-white/5 p-6 mb-6">
+                        <h2 class="text-2xl font-bold mb-4">国家法律查询系统</h2>
+                        <p class="text-sm text-gray-400 mb-6">按地区分类的国别法律资源</p>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <!-- 中亚 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                                中亚
+                            </h3>
+                            <div class="space-y-4">
+                                <!-- 乌兹别克斯坦 -->
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold text-lg mb-3">乌兹别克斯坦</h4>
+                                    <div class="space-y-2 mb-3">
+                                        <div class="text-sm text-gray-400 mb-2">官方法律网站：</div>
+                                        <a href="https://lex.uz/" target="_blank" class="block text-sm text-brand-400 hover:text-brand-300 hover:underline">• Lex.uz - 国家法律数据库</a>
+                                        <a href="https://www.gov.uz/en/pages/legislation" target="_blank" class="block text-sm text-brand-400 hover:text-brand-300 hover:underline">• Gov.uz - 政府立法信息</a>
+                                        <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E4%B9%8C%E5%85%B9%E5%88%AB%E5%85%8B%E6%96%AF%E5%9D%A6" target="_blank" class="block text-sm text-brand-400 hover:text-brand-300 hover:underline">• 商务部 - 乌兹别克斯坦法律法规 (67条)</a>
+                                    </div>
+                                    <div class="border-t border-white/10 pt-3 mt-3">
+                                        <div class="text-sm text-gray-400 mb-2">法律期刊资源：</div>
+                                        <div class="text-sm text-gray-300">• 中文：《中亚法律评论》</div>
+                                        <div class="text-sm text-gray-300">• 英文：Central Asian Law Review, Uzbekistan Legal Journal</div>
                                     </div>
                                 </div>
-                                <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                </svg>
-                            </a>
+                                
+                                <!-- 哈萨克斯坦 -->
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold text-lg mb-3">哈萨克斯坦</h4>
+                                    <div class="space-y-2">
+                                        <a href="https://adilet.zan.kz/" target="_blank" class="block text-sm text-brand-400 hover:text-brand-300 hover:underline">• Adilet - 国家法律信息系统</a>
+                                        <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E5%93%88%E8%90%A8%E5%85%8B%E6%96%AF%E5%9D%A6" target="_blank" class="block text-sm text-brand-400 hover:text-brand-300 hover:underline">• 商务部 - 哈萨克斯坦法律法规</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 东南亚 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                                东南亚
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">柬埔寨</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E6%9F%AC%E5%9F%94%E5%AF%A8" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">越南</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E8%B6%8A%E5%8D%97" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">马来西亚</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E9%A9%AC%E6%9D%A5%E8%A5%BF%E4%BA%9A" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">印度尼西亚</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E5%8D%B0%E5%BA%A6%E5%B0%BC%E8%A5%BF%E4%BA%9A" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 南亚 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
+                                南亚
+                            </h3>
+                            <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                <h4 class="font-semibold mb-2">巴基斯坦</h4>
+                                <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E5%B7%B4%E5%9F%BA%E6%96%AF%E5%9D%A6" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                            </div>
+                        </div>
+                        
+                        <!-- 拉美 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                                拉美
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">巴西</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E5%B7%B4%E8%A5%BF" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">智利</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E6%99%BA%E5%88%A9" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">哥伦比亚</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E5%93%A5%E4%BC%A6%E6%AF%94%E4%BA%9A" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 东欧 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-red-400 rounded-full mr-3"></span>
+                                东欧
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">阿塞拜疆</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E9%98%BF%E5%A1%9E%E6%8B%9C%E7%96%86" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">土耳其</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E5%9C%9F%E8%80%B3%E5%85%B6" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">塞尔维亚</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E5%A1%9E%E5%B0%94%E7%BB%B4%E4%BA%9A" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 中东 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-orange-400 rounded-full mr-3"></span>
+                                中东
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">沙特阿拉伯</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E6%B2%99%E7%89%B9" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">科威特</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E7%A7%91%E5%A8%81%E7%89%B9" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 非洲 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-pink-400 rounded-full mr-3"></span>
+                                非洲
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">摩洛哥</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E6%91%A9%E6%B4%9B%E5%93%A5" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">埃及</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E5%9F%83%E5%8F%8A" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">科特迪瓦</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E7%A7%91%E7%89%B9%E8%BF%AA%E7%93%A6" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">莫桑比克</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E8%8E%AB%E6%A1%91%E6%AF%94%E5%85%8B" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">纳米比亚</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E7%BA%B3%E7%B1%B3%E6%AF%94%E4%BA%9A" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                    <h4 class="font-semibold mb-2">南非</h4>
+                                    <a href="https://policy.mofcom.gov.cn/jwfg/searchList.shtml?title=%E5%8D%97%E9%9D%9E" target="_blank" class="text-sm text-brand-400 hover:underline">商务部法律法规</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -659,6 +872,213 @@
                             <p>项目自2009年投产以来，已累计向中国输送天然气超过<span class="text-green-400 font-semibold">3000亿立方米</span>，占中国进口天然气总量的<span class="text-green-400 font-semibold">30%以上</span>。</p>
                             <p>管道建设带动了中国装备、技术和标准"走出去"，创造了<span class="text-green-400 font-semibold">数万个</span>当地就业岗位。</p>
                             <p>该项目建立了中国与中亚能源合作的新模式，保障了国家能源安全，是<span class="text-brand-400 font-semibold">"一带一路"能源合作的典范</span>。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: Multi-dimensional Compliance Review -->
+                <div v-if="currentTab === 'compliance'" class="p-8 h-full flex gap-6 relative z-10">
+                    <!-- Left Main Area -->
+                    <div class="flex-1 flex flex-col overflow-hidden">
+                        <!-- Upload Area (when no compliance task selected) -->
+                        <div v-if="!currentComplianceTask"
+                            class="flex-1 flex flex-col items-center justify-center p-12 border-2 border-dashed border-white/10 rounded-2xl glass-card bg-white/5 hover:bg-white/10 transition-colors">
+                            <div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-6">
+                                <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <h2 class="text-2xl font-bold mb-2">多维合规审校</h2>
+                            <p class="text-gray-400 mb-6">上传文件进行合规审查，支持 PDF 或 DOCX 格式</p>
+                            
+                            <!-- Compliance Categories -->
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6 w-full max-w-2xl">
+                                <div class="bg-white/5 rounded-lg p-3 border border-white/10 text-center">
+                                    <div class="text-xs text-gray-400">反垄断合规</div>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-3 border border-white/10 text-center">
+                                    <div class="text-xs text-gray-400">环保合规</div>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-3 border border-white/10 text-center">
+                                    <div class="text-xs text-gray-400">税务合规</div>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-3 border border-white/10 text-center">
+                                    <div class="text-xs text-gray-400">反商业贿赂合规</div>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-3 border border-white/10 text-center">
+                                    <div class="text-xs text-gray-400">劳务用工合规</div>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-3 border border-white/10 text-center">
+                                    <div class="text-xs text-gray-400">合规案例库</div>
+                                </div>
+                            </div>
+                            
+                            <input type="file" @change="uploadComplianceFile" class="hidden" ref="complianceFileInput">
+                            <button @click="$refs.complianceFileInput.click()"
+                                class="px-8 py-3 bg-green-600 hover:bg-green-500 rounded-lg font-medium transition-all shadow-lg shadow-green-500/20">
+                                选择文件
+                            </button>
+                        </div>
+
+                        <!-- Processing State -->
+                        <div v-else-if="currentComplianceTask.status === 'processing'"
+                            class="flex-1 flex flex-col items-center justify-center">
+                            <div class="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mb-6">
+                            </div>
+                            <h3 class="text-xl font-medium">正在进行合规审校...</h3>
+                            <p class="text-gray-400 mt-2">AI 智能分析中</p>
+                        </div>
+
+                        <!-- Result View -->
+                        <div v-else class="h-full flex flex-col">
+                            <!-- Toolbar -->
+                            <div class="h-14 mb-4 glass-card rounded-xl px-6 flex items-center justify-between border border-white/5 flex-shrink-0">
+                                <div class="flex items-center space-x-4">
+                                    <button @click="currentComplianceTask = null" class="text-gray-400 hover:text-white text-sm">← 新建审校</button>
+                                    <div class="h-6 w-px bg-white/10"></div>
+                                    <h2 class="font-medium truncate max-w-[300px]" :title="currentComplianceTask.filename">{{ currentComplianceTask.filename }}</h2>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-sm text-gray-400">合规等级:</span>
+                                    <span class="px-3 py-1 rounded font-bold text-sm" :class="{
+                                            'bg-red-500/20 text-red-400 border border-red-500/30': currentComplianceTask.compliance_level === 'High Risk',
+                                            'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30': currentComplianceTask.compliance_level === 'Medium Risk',
+                                            'bg-green-500/20 text-green-400 border border-green-500/30': currentComplianceTask.compliance_level === 'Compliant'
+                                        }">
+                                        {{ currentComplianceTask.compliance_level }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 grid grid-cols-2 gap-4 overflow-hidden">
+                                <!-- Left: Compliance Categories -->
+                                <div class="glass-card rounded-xl border border-white/5 p-6 overflow-y-auto">
+                                    <h3 class="text-sm font-medium text-gray-400 mb-4 uppercase tracking-wider">合规审查维度</h3>
+                                    <div class="space-y-3">
+                                        <div class="p-4 rounded-lg bg-white/5 border border-white/10">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <h4 class="font-semibold">反垄断合规</h4>
+                                                <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400">通过</span>
+                                            </div>
+                                            <p class="text-sm text-gray-400">未发现垄断协议或滥用市场支配地位行为</p>
+                                        </div>
+                                        <div class="p-4 rounded-lg bg-white/5 border border-white/10">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <h4 class="font-semibold">环保合规</h4>
+                                                <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400">通过</span>
+                                            </div>
+                                            <p class="text-sm text-gray-400">符合环境保护相关法律法规要求</p>
+                                        </div>
+                                        <div class="p-4 rounded-lg bg-white/5 border border-yellow-500/20">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <h4 class="font-semibold">税务合规</h4>
+                                                <span class="text-xs px-2 py-1 rounded bg-yellow-500/20 text-yellow-400">注意</span>
+                                            </div>
+                                            <p class="text-sm text-gray-400">需关注跨境税务安排的合规性</p>
+                                        </div>
+                                        <div class="p-4 rounded-lg bg-white/5 border border-white/10">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <h4 class="font-semibold">反商业贿赂合规</h4>
+                                                <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400">通过</span>
+                                            </div>
+                                            <p class="text-sm text-gray-400">未发现商业贿赂相关风险</p>
+                                        </div>
+                                        <div class="p-4 rounded-lg bg-white/5 border border-white/10">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <h4 class="font-semibold">劳务用工合规</h4>
+                                                <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400">通过</span>
+                                            </div>
+                                            <p class="text-sm text-gray-400">劳动合同条款符合当地法律要求</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right: Policy References -->
+                                <div class="glass-card rounded-xl border border-white/5 p-6 overflow-y-auto custom-scrollbar space-y-4">
+                                    <h3 class="text-sm font-medium text-gray-400 mb-4 uppercase tracking-wider">政策法规参考</h3>
+                                    <div class="space-y-3">
+                                        <div class="p-4 rounded-lg bg-gradient-to-br from-white/5 to-white/0 border border-blue-500/20">
+                                            <h4 class="font-bold text-blue-400 mb-2">投资政策</h4>
+                                            <p class="text-sm text-gray-300 mb-2">外商投资准入特别管理措施（负面清单）</p>
+                                            <a href="#" class="text-xs text-brand-400 hover:underline">查看详情 →</a>
+                                        </div>
+                                        <div class="p-4 rounded-lg bg-gradient-to-br from-white/5 to-white/0 border border-green-500/20">
+                                            <h4 class="font-bold text-green-400 mb-2">税收政策</h4>
+                                            <p class="text-sm text-gray-300 mb-2">企业所得税法及实施条例</p>
+                                            <a href="#" class="text-xs text-brand-400 hover:underline">查看详情 →</a>
+                                        </div>
+                                        <div class="p-4 rounded-lg bg-gradient-to-br from-white/5 to-white/0 border border-yellow-500/20">
+                                            <h4 class="font-bold text-yellow-400 mb-2">行业政策</h4>
+                                            <p class="text-sm text-gray-300 mb-2">产业结构调整指导目录</p>
+                                            <a href="#" class="text-xs text-brand-400 hover:underline">查看详情 →</a>
+                                        </div>
+                                        <div class="p-4 rounded-lg bg-gradient-to-br from-white/5 to-white/0 border border-purple-500/20">
+                                            <h4 class="font-bold text-purple-400 mb-2">劳工政策</h4>
+                                            <p class="text-sm text-gray-300 mb-2">劳动合同法及相关规定</p>
+                                            <a href="#" class="text-xs text-brand-400 hover:underline">查看详情 →</a>
+                                        </div>
+                                        <div class="p-4 rounded-lg bg-gradient-to-br from-white/5 to-white/0 border border-red-500/20">
+                                            <h4 class="font-bold text-red-400 mb-2">外汇政策</h4>
+                                            <p class="text-sm text-gray-300 mb-2">外汇管理条例及实施细则</p>
+                                            <a href="#" class="text-xs text-brand-400 hover:underline">查看详情 →</a>
+                                        </div>
+                                        <div class="p-4 rounded-lg bg-gradient-to-br from-white/5 to-white/0 border border-orange-500/20">
+                                            <h4 class="font-bold text-orange-400 mb-2">合规案例库</h4>
+                                            <p class="text-sm text-gray-300 mb-2">查看相关合规案例和最佳实践</p>
+                                            <a href="#" class="text-xs text-brand-400 hover:underline">浏览案例 →</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: History Sidebar -->
+                    <div class="w-72 glass-card rounded-xl border border-white/5 flex flex-col overflow-hidden flex-shrink-0">
+                        <div class="p-4 border-b border-white/10 flex justify-between items-center">
+                            <h3 class="font-medium">审校历史</h3>
+                            <span class="text-xs text-gray-400">{{ complianceTasks.length }} 条</span>
+                        </div>
+                        <div class="p-3 border-b border-white/5">
+                            <input type="file" @change="uploadComplianceFile" class="hidden" ref="complianceFileInputSidebar">
+                            <button @click="$refs.complianceFileInputSidebar.click()"
+                                class="w-full px-4 py-2 bg-green-600 hover:bg-green-500 rounded-lg text-sm font-medium transition-all flex items-center justify-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                <span>上传新文件</span>
+                            </button>
+                        </div>
+                        <div class="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar">
+                            <div v-for="task in complianceTasks" :key="task.id"
+                                class="p-3 rounded-lg transition cursor-pointer group"
+                                :class="currentComplianceTask && currentComplianceTask.id === task.id ? 'bg-green-500/20 border border-green-500/30' : 'bg-white/5 hover:bg-white/10'"
+                                @click="viewComplianceResult(task.id)">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h4 class="text-sm font-medium truncate flex-1 mr-2">{{ task.filename }}</h4>
+                                    <button @click.stop="deleteComplianceTask(task.id)"
+                                        class="text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                            </path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-gray-500">{{ new Date(task.created_at).toLocaleDateString('zh-CN') }}</span>
+                                    <span class="px-2 py-0.5 rounded text-xs" :class="{
+                                        'bg-red-500/20 text-red-400': task.compliance_level === 'High Risk',
+                                        'bg-yellow-500/20 text-yellow-400': task.compliance_level === 'Medium Risk',
+                                        'bg-green-500/20 text-green-400': task.compliance_level === 'Compliant'
+                                    }">{{ task.compliance_level || '分析中' }}</span>
+                                </div>
+                            </div>
+                            <div v-if="complianceTasks.length === 0" class="text-center py-8 text-gray-500 text-sm">
+                                暂无审校记录
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -32,6 +32,10 @@ createApp({
         const risks = ref([]);
         const contractTasks = ref([]); // History of all contract reviews
 
+        // --- COMPLIANCE STATE ---
+        const currentComplianceTask = ref(null);
+        const complianceTasks = ref([]); // History of all compliance reviews
+
         const chartDom = ref(null);
         const fileInputSidebar = ref(null);
         let riskChart = null;
@@ -291,6 +295,57 @@ createApp({
             risks.value = [];
         };
 
+        // --- COMPLIANCE FUNCTIONS ---
+        const uploadComplianceFile = async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Optimistic UI - show processing state
+            currentComplianceTask.value = { 
+                filename: file.name, 
+                status: 'processing',
+                created_at: new Date().toISOString()
+            };
+
+            // Simulate API call (in real implementation, this would call backend)
+            setTimeout(() => {
+                currentComplianceTask.value = {
+                    id: Date.now(),
+                    filename: file.name,
+                    status: 'completed',
+                    compliance_level: 'Compliant',
+                    created_at: new Date().toISOString()
+                };
+                fetchComplianceTasks();
+            }, 2000);
+        };
+
+        const fetchComplianceTasks = async () => {
+            // In real implementation, fetch from API
+            // For now, just add current task to list if it exists
+            if (currentComplianceTask.value && currentComplianceTask.value.status === 'completed') {
+                const exists = complianceTasks.value.find(t => t.id === currentComplianceTask.value.id);
+                if (!exists) {
+                    complianceTasks.value.unshift(currentComplianceTask.value);
+                }
+            }
+        };
+
+        const viewComplianceResult = (taskId) => {
+            const task = complianceTasks.value.find(t => t.id === taskId);
+            if (task) {
+                currentComplianceTask.value = task;
+            }
+        };
+
+        const deleteComplianceTask = (taskId) => {
+            if (!confirm('确定删除此合规审校记录？')) return;
+            complianceTasks.value = complianceTasks.value.filter(t => t.id !== taskId);
+            if (currentComplianceTask.value && currentComplianceTask.value.id === taskId) {
+                currentComplianceTask.value = null;
+            }
+        };
+
         // --- CHARTS ---
         const updateChart = () => {
             if (!riskChart || !chartDom.value) return;
@@ -523,7 +578,14 @@ createApp({
             exitBatchMode,
             toggleSelectItem,
             selectAllItems,
-            batchDeleteItems
+            batchDeleteItems,
+            // Compliance Review
+            currentComplianceTask,
+            complianceTasks,
+            uploadComplianceFile,
+            fetchComplianceTasks,
+            viewComplianceResult,
+            deleteComplianceTask
         };
     }
 }).mount('#app');
