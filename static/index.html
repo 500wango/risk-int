@@ -877,9 +877,245 @@
                 </div>
 
                 <!-- View: Multi-dimensional Compliance Review -->
-                <div v-if="currentTab === 'compliance'" class="p-8 h-full flex gap-6 relative z-10">
-                    <!-- Left Main Area -->
-                    <div class="flex-1 flex flex-col overflow-hidden">
+                <div v-if="currentTab === 'compliance'" class="p-8 h-full flex flex-col relative z-10 overflow-auto">
+                    <!-- Header -->
+                    <div class="glass-card rounded-xl border border-white/5 p-6 mb-6">
+                        <h2 class="text-2xl font-bold mb-2">多维合规审校</h2>
+                        <p class="text-sm text-gray-400">企业海外投资合规风险评估与政策查询</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Left Column: Compliance Types -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                    </path>
+                                </svg>
+                                合规审查维度
+                            </h3>
+                            
+                            <!-- 反垄断合规 -->
+                            <div class="glass-card rounded-xl border border-white/5 p-5 hover:border-white/10 transition-all">
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="font-bold text-lg">反垄断合规</h4>
+                                    <span class="px-2 py-1 rounded text-xs bg-blue-500/20 text-blue-400 border border-blue-500/30">Anti-Monopoly</span>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-3">
+                                    审查企业是否存在垄断协议、滥用市场支配地位、经营者集中等反垄断法律风险。重点关注市场份额、定价策略、排他性条款等。
+                                </p>
+                                <div class="text-xs text-gray-400">
+                                    <span class="font-semibold">主要法规：</span>《反垄断法》、《经营者集中审查规定》
+                                </div>
+                            </div>
+
+                            <!-- 环保合规 -->
+                            <div class="glass-card rounded-xl border border-white/5 p-5 hover:border-white/10 transition-all">
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="font-bold text-lg">环保合规</h4>
+                                    <span class="px-2 py-1 rounded text-xs bg-green-500/20 text-green-400 border border-green-500/30">Environmental</span>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-3">
+                                    评估项目环境影响评价、排污许可、碳排放、固废处理等环保合规性。确保符合东道国及国际环保标准。
+                                </p>
+                                <div class="text-xs text-gray-400">
+                                    <span class="font-semibold">主要法规：</span>《环境保护法》、《环境影响评价法》、巴黎协定
+                                </div>
+                            </div>
+
+                            <!-- 税务合规 -->
+                            <div class="glass-card rounded-xl border border-white/5 p-5 hover:border-white/10 transition-all">
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="font-bold text-lg">税务合规</h4>
+                                    <span class="px-2 py-1 rounded text-xs bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">Tax</span>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-3">
+                                    审查跨境税务安排、转让定价、税收协定适用、常设机构认定等税务风险。防范双重征税和税基侵蚀。
+                                </p>
+                                <div class="text-xs text-gray-400">
+                                    <span class="font-semibold">主要法规：</span>《企业所得税法》、BEPS行动计划、双边税收协定
+                                </div>
+                            </div>
+
+                            <!-- 反商业贿赂合规 -->
+                            <div class="glass-card rounded-xl border border-white/5 p-5 hover:border-white/10 transition-all">
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="font-bold text-lg">反商业贿赂合规</h4>
+                                    <span class="px-2 py-1 rounded text-xs bg-red-500/20 text-red-400 border border-red-500/30">Anti-Bribery</span>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-3">
+                                    识别商业贿赂、利益输送、不正当竞争等合规风险。建立反腐败内控机制，确保符合FCPA、UK Bribery Act等国际标准。
+                                </p>
+                                <div class="text-xs text-gray-400">
+                                    <span class="font-semibold">主要法规：</span>《反不正当竞争法》、FCPA、UK Bribery Act
+                                </div>
+                            </div>
+
+                            <!-- 劳务用工合规 -->
+                            <div class="glass-card rounded-xl border border-white/5 p-5 hover:border-white/10 transition-all">
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="font-bold text-lg">劳务用工合规</h4>
+                                    <span class="px-2 py-1 rounded text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30">Labor</span>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-3">
+                                    审查劳动合同、工资福利、工作时间、社会保险、劳动保护等用工合规性。关注当地劳工法律和工会规定。
+                                </p>
+                                <div class="text-xs text-gray-400">
+                                    <span class="font-semibold">主要法规：</span>《劳动合同法》、《社会保险法》、ILO公约
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Policy Query & Case Library -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                                    </path>
+                                </svg>
+                                国家法律查询系统
+                            </h3>
+
+                            <!-- 投资政策 -->
+                            <div class="glass-card rounded-xl border border-white/5 p-5 hover:border-white/10 transition-all cursor-pointer group">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h4 class="font-bold text-lg text-blue-400">投资政策</h4>
+                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-2">
+                                    外商投资准入特别管理措施（负面清单）、鼓励外商投资产业目录、境外投资管理办法
+                                </p>
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">负面清单</span>
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">产业目录</span>
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">投资管理</span>
+                                </div>
+                            </div>
+
+                            <!-- 税收政策 -->
+                            <div class="glass-card rounded-xl border border-white/5 p-5 hover:border-white/10 transition-all cursor-pointer group">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h4 class="font-bold text-lg text-green-400">税收政策</h4>
+                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-2">
+                                    企业所得税法、增值税法、税收协定、转让定价规则、税收优惠政策
+                                </p>
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">所得税</span>
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">税收协定</span>
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">优惠政策</span>
+                                </div>
+                            </div>
+
+                            <!-- 行业政策 -->
+                            <div class="glass-card rounded-xl border border-white/5 p-5 hover:border-white/10 transition-all cursor-pointer group">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h4 class="font-bold text-lg text-yellow-400">行业政策</h4>
+                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-2">
+                                    产业结构调整指导目录、行业准入标准、产能政策、技术标准与认证要求
+                                </p>
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">产业目录</span>
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">准入标准</span>
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">技术认证</span>
+                                </div>
+                            </div>
+
+                            <!-- 劳工政策 -->
+                            <div class="glass-card rounded-xl border border-white/5 p-5 hover:border-white/10 transition-all cursor-pointer group">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h4 class="font-bold text-lg text-purple-400">劳工政策</h4>
+                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-2">
+                                    劳动合同法、社会保险法、工资支付规定、工作时间与休假制度、劳动保护标准
+                                </p>
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">劳动合同</span>
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">社会保险</span>
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">劳动保护</span>
+                                </div>
+                            </div>
+
+                            <!-- 外汇政策 -->
+                            <div class="glass-card rounded-xl border border-white/5 p-5 hover:border-white/10 transition-all cursor-pointer group">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h4 class="font-bold text-lg text-red-400">外汇政策</h4>
+                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-2">
+                                    外汇管理条例、跨境资金流动管理、外汇登记与核销、利润汇出规定
+                                </p>
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">外汇管理</span>
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">跨境资金</span>
+                                    <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400">利润汇出</span>
+                                </div>
+                            </div>
+
+                            <!-- 合规案例库 -->
+                            <div class="glass-card rounded-xl border border-orange-500/30 p-5 bg-gradient-to-br from-orange-500/10 to-transparent hover:border-orange-500/50 transition-all cursor-pointer group">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h4 class="font-bold text-lg text-orange-400 flex items-center">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                                            </path>
+                                        </svg>
+                                        合规案例库
+                                    </h4>
+                                    <svg class="w-5 h-5 text-orange-400 group-hover:text-orange-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-300 mb-3">
+                                    查看中国企业海外投资合规案例、风险事件分析、最佳实践指南
+                                </p>
+                                <div class="grid grid-cols-2 gap-2 text-xs">
+                                    <div class="bg-white/5 rounded p-2">
+                                        <div class="text-orange-400 font-semibold">反垄断案例</div>
+                                        <div class="text-gray-400">23 个案例</div>
+                                    </div>
+                                    <div class="bg-white/5 rounded p-2">
+                                        <div class="text-orange-400 font-semibold">环保违规</div>
+                                        <div class="text-gray-400">18 个案例</div>
+                                    </div>
+                                    <div class="bg-white/5 rounded p-2">
+                                        <div class="text-orange-400 font-semibold">税务争议</div>
+                                        <div class="text-gray-400">31 个案例</div>
+                                    </div>
+                                    <div class="bg-white/5 rounded p-2">
+                                        <div class="text-orange-400 font-semibold">劳资纠纷</div>
+                                        <div class="text-gray-400">15 个案例</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: Dispute Resolution Consulting (keeping original) -->
+                <div v-if="currentTab === 'dispute'" class="p-8 h-full flex flex-col relative z-10 overflow-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- 争议类别 -->
+                        <div class="glass-card rounded-xl border border-white/5 p-6">
+                            <h2 class="text-xl font-bold mb-6 flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <!-- Upload Area (when no compliance task selected) -->
                         <div v-if="!currentComplianceTask"
                             class="flex-1 flex flex-col items-center justify-center p-12 border-2 border-dashed border-white/10 rounded-2xl glass-card bg-white/5 hover:bg-white/10 transition-colors">
