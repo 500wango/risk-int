@@ -5,6 +5,7 @@ createApp({
         const currentTab = ref('global');
         const chartTab = ref('heatmap');  // 'heatmap' or 'trend'
         const sanctionsTab = ref('entities');  // 'entities' or 'individuals'
+        const caseStudyTab = ref('cnpc');  // 'cnpc' or 'powerchina'
         const currentTime = ref('');
         const newUrl = ref('');
         const loadingSource = ref(false);
@@ -533,6 +534,7 @@ createApp({
             currentTab,
             chartTab,
             sanctionsTab,
+            caseStudyTab,
             currentTime,
             newUrl,
             loadingSource,

@@ -713,12 +713,37 @@
 
                 <!-- View: Chinese Enterprise Overseas Investment Case Study -->
                 <div v-if="currentTab === 'casestudy'" class="p-8 h-full flex flex-col relative z-10 overflow-auto">
+                    <!-- Header -->
                     <div class="glass-card rounded-xl border border-white/5 p-6 mb-6">
                         <h2 class="text-2xl font-bold mb-2">中国企业海外投资案例库</h2>
-                        <p class="text-sm text-gray-400">中石油中亚天然气管道项目</p>
+                        <p class="text-sm text-gray-400">深度解析中国企业海外投资典型案例</p>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Case Study Tabs -->
+                    <div class="flex space-x-2 mb-6">
+                        <button 
+                            @click="caseStudyTab = 'cnpc'"
+                            :class="caseStudyTab === 'cnpc' ? 'bg-brand-500 text-white' : 'bg-white/5 text-gray-300 hover:bg-white/10'"
+                            class="px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            <span>中石油中亚天然气管道</span>
+                        </button>
+                        <button 
+                            @click="caseStudyTab = 'powerchina'"
+                            :class="caseStudyTab === 'powerchina' ? 'bg-brand-500 text-white' : 'bg-white/5 text-gray-300 hover:bg-white/10'"
+                            class="px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            <span>中国电建智利光伏储能</span>
+                        </button>
+                    </div>
+
+                    <!-- Case 1: CNPC Central Asia Gas Pipeline -->
+                    <div v-if="caseStudyTab === 'cnpc'">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- 企业及项目概况 -->
                         <div class="glass-card rounded-xl border border-white/5 p-6">
                             <h3 class="text-lg font-bold mb-4 flex items-center">
@@ -874,17 +899,11 @@
                             <p>该项目建立了中国与中亚能源合作的新模式，保障了国家能源安全，是<span class="text-brand-400 font-semibold">"一带一路"能源合作的典范</span>。</p>
                         </div>
                     </div>
-
-                    <!-- 案例分隔线 -->
-                    <div class="my-8 border-t border-white/10"></div>
-
-                    <!-- 案例2：中国电建智利CEME1光伏储能项目 -->
-                    <div class="glass-card rounded-xl border border-white/5 p-6 mb-6">
-                        <h2 class="text-2xl font-bold mb-2">中国企业海外投资案例库</h2>
-                        <p class="text-sm text-gray-400">中国电建智利CEME1光伏储能项目</p>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Case 2: PowerChina Chile CEME1 Solar Storage Project -->
+                    <div v-if="caseStudyTab === 'powerchina'">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- 企业及项目概况 -->
                         <div class="glass-card rounded-xl border border-white/5 p-6">
                             <h3 class="text-lg font-bold mb-4 flex items-center">
@@ -1042,6 +1061,7 @@
                             <p>该项目创新了中国新能源企业<span class="text-brand-400 font-semibold">"技术+投资+本地化"三位一体</span>的出海模式，将中国在光伏储能领域的技术创新应用于全球最具挑战性的环境，推动了全球新能源技术进步。</p>
                             <p>项目为中国企业在完全市场化的电力市场中竞争提供了宝贵经验，提升了中国新能源产业的全球品牌形象。</p>
                         </div>
+                    </div>
                     </div>
                 </div>
 
