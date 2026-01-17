@@ -160,9 +160,9 @@ async def process_source_background(source_id: str, url: str):
                     print(f"Error processing {item}: {e}")
                     return None
             
-            # 并行处理（最多3个并发）
+            # 并行处理（最多5个并发 - 性能优化）
             import asyncio
-            semaphore = asyncio.Semaphore(3)
+            semaphore = asyncio.Semaphore(5)  # 从3提升到5
             
             async def limited_process(item):
                 async with semaphore:
@@ -237,18 +237,21 @@ async def add_source(url: str, background_tasks: BackgroundTasks, db: AsyncSessi
 
 @router.get("/intelligence/list")
 async def list_intelligence(db: AsyncSession = Depends(get_db)):
+    # 性能优化: 使用 selectinload 预加载关联数据
+    from sqlalchemy.orm import selectinload
+    
     result = await db.execute(
-        select(IntelligenceItem, IntelligenceSource.url)
-        .join(IntelligenceSource, IntelligenceItem.source_id == IntelligenceSource.id)
-        .order_by(IntelligenceItem.created_at.desc())  # 按采集时间排序，最新的在前
+        select(IntelligenceItem)
+        .options(selectinload(IntelligenceItem.source))
+        .order_by(IntelligenceItem.created_at.desc())
     )
     
     response = []
-    for item, url in result.all():
+    for item in result.scalars().all():
         data = {
             "id": item.id,
             "source_id": item.source_id,
-            "source_url": item.url if item.url else url,
+            "source_url": item.url if item.url else item.source.url,
             "title": item.title,
             "title_zh": item.title_zh,
             "publish_date": item.publish_date,
@@ -390,13 +393,22 @@ async def upload_contract(file: UploadFile = File(...), db: AsyncSession = Depen
         all_ai_risks = []
         overall_levels = []
         
-        for i, chunk in enumerate(chunks[:3]):
+        # 性能优化: 并行处理chunks
+        async def analyze_chunk(i: int, chunk: str):
             print(f"[Contract] Analyzing chunk {i+1}/{min(len(chunks), 3)}...")
-            ai_result = await ai_engine.analyze_contract_clause(
+            return await ai_engine.analyze_contract_clause(
                 chunk, 
                 context=f"{task.filename} (第{i+1}部分，共{min(len(chunks), 3)}部分)",
                 contract_type=""
             )
+        
+        # 并行分析前3个chunks
+        results = await asyncio.gather(*[
+            analyze_chunk(i, chunk) 
+            for i, chunk in enumerate(chunks[:3])
+        ])
+        
+        for ai_result in results:
             if ai_result.get("risks"):
                 all_ai_risks.extend(ai_result["risks"])
             if ai_result.get("overall_risk_level"):

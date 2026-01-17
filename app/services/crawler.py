@@ -1,5 +1,6 @@
 from crawl4ai import AsyncWebCrawler
 from app.core.config import settings
+from app.services.cache_service import cache_service
 import logging
 import re
 
@@ -25,10 +26,20 @@ class CrawlerService:
         """
         Fetches a page and returns its content as Markdown.
         Uses optimized Playwright settings.
+        性能优化: 添加缓存
         """
+        # 检查缓存
+        cached = cache_service.get_url_content(url)
+        if cached:
+            logger.info(f"Cache hit for {url}")
+            return cached
+        
         # gov.uz 网站使用专门的 Playwright 爬取（低内存模式下使用普通爬虫）
         if 'gov.uz' in url and not settings.LOW_MEMORY_MODE:
-            return await CrawlerService._fetch_with_playwright(url)
+            markdown = await CrawlerService._fetch_with_playwright(url)
+            if markdown:
+                cache_service.set_url_content(url, markdown)
+            return markdown
         
         try:
             crawler = await CrawlerService.get_crawler()
@@ -50,6 +61,10 @@ class CrawlerService:
             # 商务部网站特殊处理：提取文章正文
             if 'mofcom.gov.cn' in url and '/art/' in url:
                 markdown = CrawlerService._extract_mofcom_article(markdown)
+            
+            # 缓存结果
+            if markdown:
+                cache_service.set_url_content(url, markdown)
             
             return markdown
         except Exception as e:

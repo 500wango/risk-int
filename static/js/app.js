@@ -351,8 +351,8 @@ createApp({
         const updateChart = () => {
             if (!riskChart || !chartDom.value) return;
 
-            // 固定日期
-            const today = '2026-01-09';
+            // 动态获取当前日期
+            const today = new Date().toISOString().split('T')[0];
             
             // 计算刻度标签位置 (只在顶部轴显示)
             const chartWidth = chartDom.value.offsetWidth || 600;

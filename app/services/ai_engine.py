@@ -5,6 +5,8 @@ import os
 from urllib.parse import urlparse
 from openai import AsyncOpenAI
 from app.core.config import settings
+from app.services.cache_service import cache_service
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 # Initialize Client - DeepSeek compatible endpoint
 client = AsyncOpenAI(
@@ -125,11 +127,24 @@ class AIEngine:
             return {"value_level": "Low", "reason": str(e)}
 
     @staticmethod
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10),
+        retry=retry_if_exception_type((Exception,))
+    )
     async def extract_intelligence(text: str, url: str = "") -> dict:
         """
         Uses DeepSeek to extract structured intelligence.
         Uses site-specific hints for better extraction.
+        性能优化: 添加缓存和重试机制
         """
+        # 检查缓存
+        content_hash = cache_service.hash_content(text[:1000])  # 用前1000字符做哈希
+        cached = cache_service.get_extraction(content_hash)
+        if cached:
+            print(f"[Cache] Hit for extraction: {url}")
+            return cached
+        
         # 获取站点特定配置
         site_config = get_site_config(url) if url else SITE_PROMPTS["_default"]
         content_hints = site_config.get("content_hints", "")
@@ -179,7 +194,13 @@ class AIEngine:
                 response_format={"type": "json_object"},
                 timeout=120  # 增加超时时间
             )
-            return json.loads(response.choices[0].message.content)
+            result = json.loads(response.choices[0].message.content)
+            
+            # 缓存结果
+            if result:
+                cache_service.set_extraction(content_hash, result)
+            
+            return result
         except Exception as e:
             print(f"Extraction Error: {e}")
             return {}
@@ -328,10 +349,15 @@ class AIEngine:
             return {"page_type": "article", "links": []}
 
     @staticmethod
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10)
+    )
     async def analyze_contract_clause(clause_text: str, context: str = "", contract_type: str = "") -> dict:
         """
         Analyzes a contract clause for risks using specialized prompt for international energy projects.
         Returns multiple risk points with detailed analysis.
+        性能优化: 添加重试机制
         """
         system_prompt = """
 # 角色设定
